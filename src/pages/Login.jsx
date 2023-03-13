@@ -1,61 +1,71 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Loading from '../components/Loading';
 import { createUser } from '../services/userAPI';
 
 class Login extends Component {
   state = {
     disableButton: true,
     name: '',
-  };
-
-  handleSubmit = (event) => {
-    event.preventDefault();
+    isLoading: false,
   };
 
   handleChange = ({ target }) => {
-    const { value } = target;
+    const { name, value } = target;
+    const MIN__LENGTH = 3;
+    const disableButton = value.length < MIN__LENGTH;
     this.setState({
-      name: value,
-    }, this.verifyCharacters);
+      [name]: value,
+      disableButton,
+    });
   };
 
-  verifyCharacters = () => {
+  handleClick = async (event) => {
+    event.preventDefault();
+    const { history } = this.props;
     const { name } = this.state;
-    const MIN__LENGTH = 3;
-    if (name.length < MIN__LENGTH) {
-      this.setState({
-        disableButton: true,
-      });
-    } else {
-      this.setState({
-        disableButton: false,
-      });
-    }
+    this.setState({
+      isLoading: true,
+    });
+    await createUser({ name });
+    this.setState({
+      isLoading: false,
+    });
+    history.push('search');
   };
 
   render() {
-    const { disableButton, name } = this.state;
+    const { disableButton, name, isLoading } = this.state;
     return (
       <div data-testid="page-login">
-        <form onSubmit={ this.handleSubmit }>
+        <form>
           <input
             type="text"
             placeholder="Digite seu nome"
             data-testid="login-name-input"
             onChange={ this.handleChange }
             value={ name }
+            name="name"
           />
           <button
             type="submit"
             data-testid="login-submit-button"
             disabled={ disableButton }
-            onClick={ createUser(name) }
+            onClick={ this.handleClick }
           >
             Entrar
           </button>
         </form>
+        { isLoading && <Loading /> }
       </div>
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default Login;
