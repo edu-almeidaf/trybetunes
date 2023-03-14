@@ -6,7 +6,7 @@ import MusicCard from '../components/MusicCard';
 
 class Album extends Component {
   state = {
-    newAlbum: [],
+    arrayOfMusic: [],
     artistName: '',
     collectionName: '',
   };
@@ -18,18 +18,19 @@ class Album extends Component {
   fetchMusic = async () => {
     const { match: { params: { id } } } = this.props;
     const albumMusics = await getMusics(id);
-    const newAlbum = albumMusics.filter((_album, index) => index !== 0);
+    const arrayOfMusic = albumMusics.filter((_album, index) => index !== 0);
+    console.log(arrayOfMusic);
     const { artistName } = albumMusics[0];
     const { collectionName } = albumMusics[0];
     this.setState({
-      newAlbum,
+      arrayOfMusic,
       artistName,
       collectionName,
     });
   };
 
   render() {
-    const { newAlbum, artistName, collectionName } = this.state;
+    const { arrayOfMusic, artistName, collectionName } = this.state;
     return (
       <div data-testid="page-album">
         <Header />
@@ -38,11 +39,13 @@ class Album extends Component {
         <h2 data-testid="album-name">{ collectionName }</h2>
 
         {
-          newAlbum.map((music) => (
+          arrayOfMusic.map((music) => (
             <MusicCard
               key={ music.trackId }
               trackName={ music.trackName }
               previewUrl={ music.previewUrl }
+              trackId={ music.trackId }
+              music={ music }
             />
           ))
         }
