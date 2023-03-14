@@ -26,7 +26,9 @@ class MusicCard extends Component {
       await addSong(music);
       this.setState({ isLoading: false });
     } else {
+      this.setState({ isLoading: true });
       await removeSong(music);
+      this.setState({ isLoading: false });
     }
   };
 
