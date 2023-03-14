@@ -3,16 +3,19 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
+import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class Album extends Component {
   state = {
     arrayOfMusic: [],
+    newArray: [],
     artistName: '',
     collectionName: '',
   };
 
   componentDidMount() {
     this.fetchMusic();
+    this.getSavedSongs();
   }
 
   fetchMusic = async () => {
@@ -28,8 +31,21 @@ class Album extends Component {
     });
   };
 
+  getSavedSongs = async () => {
+    const savedSongs = await getFavoriteSongs();
+    const { arrayOfMusic } = this.state;
+    const newArray = arrayOfMusic.map((music) => {
+      const isFavorite = savedSongs
+        .some((savedSong) => savedSong.trackId === music.trackId);
+      return { ...music, isFavorite };
+    });
+    this.setState({
+      newArray,
+    });
+  };
+
   render() {
-    const { arrayOfMusic, artistName, collectionName } = this.state;
+    const { newArray, artistName, collectionName } = this.state;
     return (
       <div data-testid="page-album">
         <Header />
@@ -38,13 +54,14 @@ class Album extends Component {
         <h2 data-testid="album-name">{ collectionName }</h2>
 
         {
-          arrayOfMusic.map((music) => (
+          newArray.map((music) => (
             <MusicCard
               key={ music.trackId }
               trackName={ music.trackName }
               previewUrl={ music.previewUrl }
               trackId={ music.trackId }
               music={ music }
+              isFavorite={ music.isFavorite }
             />
           ))
         }
