@@ -19,7 +19,6 @@ class Album extends Component {
     const { match: { params: { id } } } = this.props;
     const albumMusics = await getMusics(id);
     const arrayOfMusic = albumMusics.filter((_album, index) => index !== 0);
-    console.log(arrayOfMusic);
     const { artistName } = albumMusics[0];
     const { collectionName } = albumMusics[0];
     this.setState({
