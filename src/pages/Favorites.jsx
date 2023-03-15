@@ -19,15 +19,21 @@ class Favorites extends Component {
     });
   }
 
-  componentDidUpdate() {
-    this.getSongs();
-  }
+  // componentDidUpdate() {
+  //   this.getSongs();
+  // }
 
   getSongs = async () => {
     const savedSongs = await getFavoriteSongs();
     this.setState({
       savedSongs,
     });
+  };
+
+  removeSavedSong = (trackId) => {
+    this.setState((prevState) => ({
+      savedSongs: prevState.savedSongs.filter((song) => song.trackId !== trackId),
+    }));
   };
 
   render() {
@@ -47,6 +53,7 @@ class Favorites extends Component {
                   trackId={ music.trackId }
                   music={ music }
                   isFavorite={ isFavorite }
+                  removeSavedSong={ this.removeSavedSong }
                 />
               ))
             )
