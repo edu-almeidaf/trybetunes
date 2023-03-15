@@ -19,16 +19,14 @@ class MusicCard extends Component {
   fetchSongs = async () => {
     const { favorite } = this.state;
     const { music, removeSavedSong, trackId } = this.props;
+    this.setState({ isLoading: true });
     if (favorite) {
-      this.setState({ isLoading: true });
       await addSong(music);
-      this.setState({ isLoading: false });
     } else {
-      this.setState({ isLoading: true });
       await removeSong(music);
       removeSavedSong(trackId);
-      this.setState({ isLoading: false });
     }
+    this.setState({ isLoading: false });
   };
 
   handleChange = ({ target }) => {

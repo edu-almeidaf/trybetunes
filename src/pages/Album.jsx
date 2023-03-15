@@ -62,6 +62,7 @@ class Album extends Component {
               trackId={ music.trackId }
               music={ music }
               isFavorite={ music.isFavorite }
+              removeSavedSong={ () => {} }
             />
           ))
         }
