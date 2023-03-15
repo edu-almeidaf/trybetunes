@@ -38,7 +38,7 @@ class Profile extends Component {
                 <p>{ description }</p>
                 <img
                   src={ image }
-                  alt={ name }
+                  alt="Foto de perfil"
                   data-testid="profile-image"
                 />
                 <Link to="/profile/edit">

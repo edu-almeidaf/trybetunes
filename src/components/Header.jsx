@@ -28,7 +28,7 @@ class Header extends Component {
         {
           isLoading
             ? <Loading />
-            : <h1 data-testid="header-user-name">{ `Olá ${name}` }</h1>
+            : <h1 data-testid="header-user-name">{ name }</h1>
         }
         <Link to="/search" data-testid="link-to-search">Pesquisar</Link>
         <Link to="/favorites" data-testid="link-to-favorites">Favoritos</Link>
